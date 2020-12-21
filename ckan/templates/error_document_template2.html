@@ -1,0 +1,25 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ gettext('Error %(error_code)s', error_code=c.code[0]) }}{% endblock %}
+
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
+      {{ c.content}}<br><br>
+(1) 本データセットは、データ帰属組織内のみで閲覧可能な設定になっている可能性があります。もし、G空間情報センター上での閲覧を許可されている場合は、ログインいただき再度表示いただくか、ログインしても閲覧できない場合、ご所属の組織管理者の方にお問い合わせください。<br><br>
+(2) インフラデータチャレンジで公開しているデータへのアクセスの場合<br>
+本データセットは、データチャレンジ参加者用に限定公開のデータセットになっています。
+インフラデータチャレンジページから<a href="https://urbandata-challenge.jp/news/idc2020">規約への同意</a>を行った上で、ログインを行うとダウンロードできるようになります。
+    </div>
+  </article>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block flash %}
+  {# eat the flash messages caused by the 404 #}
+  {% set flash_messages = h.flash.pop_messages() %}
+{% endblock %}
+
+{% block secondary %}{% endblock %}
