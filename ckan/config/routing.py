@@ -98,7 +98,7 @@ def make_map():
     for plugin in p.PluginImplementations(p.IRoutes):
         map = plugin.before_map(map)
 
-    # map.connect('home', '/', controller='home', action='index')
+    map.connect('home', '/', controller='home', action='index')
     map.connect('about', '/about', controller='home', action='about')
 
     # CKAN API versioned.
@@ -190,7 +190,7 @@ def make_map():
     ## /END API
     ###########
 
-    map.redirect('/', '/dataset')
+#    map.redirect('/', '/dataset')
     map.redirect('/packages', '/dataset')
     map.redirect('/packages/{url:.*}', '/dataset/{url}')
     map.redirect('/package', '/dataset')

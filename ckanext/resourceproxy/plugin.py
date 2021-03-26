@@ -8,6 +8,11 @@ from pylons import config
 
 log = getLogger(__name__)
 
+import ckan.lib.uploader as uploader
+
+from boto.s3.connection import S3Connection
+from boto.s3.key import Key
+from pylons import config
 
 def get_proxified_resource_url(data_dict, proxy_schemes=['http','https']):
     '''
@@ -28,6 +33,39 @@ def get_proxified_resource_url(data_dict, proxy_schemes=['http','https']):
             id=data_dict['package']['name'],
             resource_id=data_dict['resource']['id'])
         log.info('Proxified url is {0}'.format(url))
+
+    if 's3filestore' in config.get('ckan.plugins', ''):
+
+        BASE_PATH = config.get('ckan.storage_path')
+        AWS_ACCESS_KEY_ID = config.get('ckanext.s3filestore.aws_access_key_id')
+        AWS_SECRET_ACCESS_KEY = config.get('ckanext.s3filestore.aws_secret_access_key')
+        AWS_BUCKET_NAME = config.get('ckanext.s3filestore.aws_bucket_name')
+        AWS_STORAGE_PATH = config.get('ckanext.s3filestore.aws_storage_path')
+
+        s3_connection = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+        bucket = s3_connection.get_bucket(AWS_BUCKET_NAME)
+        k = Key(bucket)
+
+        id=data_dict['resource']['package_id']
+        resource_id=data_dict['resource']['id']
+#        url = data_dict['resource']['url']
+
+#        k.key = 'resources/' + resource_id + '/' +str(url.split('/')[-1])
+
+#        if AWS_STORAGE_PATH:
+#           k.key = AWS_STORAGE_PATH + '/' + k.key
+
+        #tpath = 'http://www.gspf.jp/s1/ckan/dataset/'+str(id)+'/resource/'+str(resource_id)+'/download/'+str(url.split('/')[-1])
+#        tpath = BASE_PATH +'/resources/'+str(resource_id[0:3])+'/'+str(resource_id[3:6])+'/'+str(resource_id[6:])
+#        k.get_contents_to_filename(tpath)
+#        k.set_contents_from_filename(tpath)
+#        k.make_public()
+
+    #url = data_dict['resource']['url']
+    #url = 'http://gspf-resource.s3.amazonaws.com/ckan/resources/'+str(resource_id)+'/'+str(url.split('/')[-1])
+    #url = 'http://www.gspf.jp/s1/ckan/dataset/'
+    #url = 'http://web.gspf.jp/s1/ckan/dataset/'+str(id)+'/resource/'+str(resource_id)+'/download/'+str(url.split('/')[-1])
+
     return url
 
 

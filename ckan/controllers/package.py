@@ -577,6 +577,10 @@ class PackageController(base.BaseController):
                                           errors, error_summary)
             except NotAuthorized:
                 abort(401, _('Unauthorized to edit this resource'))
+
+#            if 's3filestore' in config.get('ckan.plugins', ''):
+#               redirect(h.url_for(controller='ckanext.s3filestore.plugin:ResourceDataController', action='resource_s3upload', id=id, resource_id=resource_id))     
+#            else:
             redirect(h.url_for(controller='package', action='resource_read',
                                id=id, resource_id=resource_id))
 
@@ -700,16 +704,14 @@ class PackageController(base.BaseController):
                 get_action('package_update')(
                     dict(context, allow_state_change=True),
                     dict(data_dict, state='active'))
-                redirect(h.url_for(controller='package',
-                                   action='read', id=id))
+                redirect(h.url_for(controller='package', action='read', id=id))
             elif save_action == 'go-dataset':
                 # go to first stage of add dataset
                 redirect(h.url_for(controller='package',
                                    action='edit', id=id))
             elif save_action == 'go-dataset-complete':
                 # go to first stage of add dataset
-                redirect(h.url_for(controller='package',
-                                   action='read', id=id))
+                redirect(h.url_for(controller='package', action='read', id=id))
             else:
                 # add more resources
                 redirect(h.url_for(controller='package',

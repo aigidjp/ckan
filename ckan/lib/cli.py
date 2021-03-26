@@ -1227,7 +1227,7 @@ class Tracking(CkanCommand):
         sql = '''UPDATE tracking_summary t
                  SET package_id = COALESCE(
                         (SELECT id FROM package p
-                        WHERE p.name = regexp_replace(' ' || t.url, '^[ ]{1}(/\w{2}){0,1}' || %s, ''))
+                        WHERE p.name = regexp_replace(' ' || t.url, '^[ ]{1}(/\w{1,}){0,}' || %s, ''))
                      ,'~~not~found~~')
                  WHERE t.package_id IS NULL
                  AND tracking_type = 'page';'''

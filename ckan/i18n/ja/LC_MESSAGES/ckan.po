@@ -305,6 +305,12 @@ msgstr "フォーマット"
 msgid "Licenses"
 msgstr "ライセンス"
 
+#: ckan/controllers/group.py:314 ckan/controllers/home.py:71
+#: ckan/controllers/package.py:243 ckan/lib/helpers.py:759
+msgid "Charges"
+msgstr "有償区分"
+
+
 #: ckan/controllers/group.py:453
 msgid "Not authorized to perform bulk update"
 msgstr "バルク更新を実行するための権限がありません"
@@ -4539,3 +4545,21 @@ msgstr "ウェブページURL"
 #: ckanext/webpageview/theme/templates/webpage_form.html:3
 msgid "eg. http://example.com (if blank uses resource url)"
 msgstr "例： http://example.com (空白の場合はリソースURL)"
+
+
+#: ckanext-gspf/ckanext/gspf/templates/snippets/search_form.html
+msgid "thumbnail-on"
+msgstr "サムネイル表示"
+
+msgid "thumbnail-off"
+msgstr "サムネイル非表示"
+
+msgid "Charge-Modify"
+msgstr "有償データ＆更新日"
+
+
+
+
+
+
+

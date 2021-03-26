@@ -179,10 +179,17 @@ def current_package_list_with_resources(context, data_dict):
 
     _check_access('current_package_list_with_resources', context, data_dict)
 
+    #comment
     is_sysadmin = authz.is_sysadmin(user)
     q = '+capacity:public' if not is_sysadmin else '*:*'
     context['ignore_capacity_check'] = True
-    search = package_search(context, {'q': q, 'rows': limit, 'start': offset})
+    search = package_search(context, {'q': q, 'rows': limit, 'start': offset, 'include_private': is_sysadmin})
+
+    #add
+    #search = package_search(context, {
+    #    'q': '', 'rows': limit, 'start': offset,
+    #    'include_private': authz.is_sysadmin(user) })
+
     return search.get('results', [])
 
 
@@ -1542,7 +1549,9 @@ def user_show(context, data_dict):
 
         if include_private_and_draft_datasets:
             context['ignore_capacity_check'] = True
-            search_dict.update({'include_drafts': True})
+            search_dict.update({
+                'include_private': True,
+                'include_drafts': True})
 
         search_dict.update({'fq': fq})
 
@@ -1914,13 +1923,17 @@ def package_search(context, data_dict):
         # If this query hasn't come from a controller that has set this flag
         # then we should remove any mention of capacity from the fq and
         # instead set it to only retrieve public datasets
-        fq = data_dict.get('fq', '')
-        if not context.get('ignore_capacity_check', False):
-            fq = ' '.join(p for p in fq.split(' ')
-                          if 'capacity:' not in p)
-            data_dict['fq'] = fq + ' capacity:"public"'
+        
+        # comment
+        #fq = data_dict.get('fq', '')
+        #if not context.get('ignore_capacity_check', False):
+        #    fq = ' '.join(p for p in fq.split(' ')
+        #                  if 'capacity:' not in p)
+        #    data_dict['fq'] = fq + ' capacity:"public"'
 
         # Solr doesn't need 'include_drafts`, so pop it.
+        # add
+        include_private = asbool(data_dict.pop('include_private', True))
         include_drafts = data_dict.pop('include_drafts', False)
         fq = data_dict.get('fq', '')
         if include_drafts:
@@ -1934,6 +1947,12 @@ def package_search(context, data_dict):
                     ' ((creator_user_id:{0} AND +state:(draft OR active))' \
                     ' OR state:active)'.format(user_id)
         elif not authz.is_sysadmin(user):
+            data_dict['fq'] = fq + ' +state:active +capacity:public'
+
+        if not include_private:
+            data_dict['fq'] = ' +capacity:public ' + data_dict['fq']
+
+        if context.get('ignore_capacity_check', False):
             data_dict['fq'] = fq + ' +state:active'
 
         # Pop these ones as Solr does not need them
