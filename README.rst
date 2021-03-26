@@ -1,6 +1,8 @@
 CKAN: The Open Source Data Portal Software
 ==========================================
 
+G空間情報センター　20210/03/26　時点
+
 .. image:: https://secure.travis-ci.org/ckan/ckan.png?branch=master
     :target: http://travis-ci.org/ckan/ckan
     :alt: Build Status
